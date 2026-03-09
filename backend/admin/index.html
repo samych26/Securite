@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin – Utilisateurs</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      padding: 32px 24px;
+    }
+
+    h1 { font-size: 22px; margin-bottom: 8px; }
+
+    .subtitle { color: #7d8590; margin-bottom: 28px; font-size: 13px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #161b22;
+      border: 1px solid #30363d;
+      padding: 10px 16px;
+      text-align: left;
+      color: #7d8590;
+      font-weight: 600;
+    }
+
+    td {
+      border: 1px solid #30363d;
+      padding: 10px 16px;
+    }
+
+    tr:hover td { background: #161b22; }
+
+    .btn-delete {
+      background: #da3633;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-delete:hover { background: #b91c1c; }
+
+    .empty { color: #7d8590; padding: 32px; text-align: center; }
+  </style>
+</head>
+<body>
+  <h1>🗂 Utilisateurs</h1>
+  <p class="subtitle" id="count">Chargement…</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Login / Email</th>
+        <th>Mot de passe</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+
+  <script>
+    async function load() {
+      const data = await fetch('/api/users').then(r => r.json());
+      const tbody = document.getElementById('tbody');
+      document.getElementById('count').textContent = `${data.length} utilisateur(s) enregistré(s)`;
+
+      tbody.innerHTML = '';
+      if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty">Aucune donnée.</td></tr>';
+        return;
+      }
+
+      data.forEach(u => {
+        const tr = document.createElement('tr');
+        tr.id = `row-${u.id}`;
+        tr.innerHTML = `
+          <td>${u.id}</td>
+          <td>${u.login}</td>
+          <td>${u.password}</td>
+          <td>${new Date(u.date).toLocaleString('fr-FR')}</td>
+          <td><button class="btn-delete" onclick="del(${u.id})">Supprimer</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function del(id) {
+      if (!confirm('Supprimer cet utilisateur ?')) return;
+      await fetch(`/api/users/${id}`, { method: 'DELETE' });
+      document.getElementById(`row-${id}`).remove();
+      const count = document.querySelectorAll('#tbody tr').length;
+      document.getElementById('count').textContent = `${count} utilisateur(s) enregistré(s)`;
+    }
+
+    load();
+  </script>
+</body>
+</html>
