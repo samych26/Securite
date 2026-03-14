@@ -69,7 +69,7 @@ form.addEventListener('submit', function (e) {
     btn.textContent = 'Signing in…';
     btn.disabled = true;
 
-    fetch('http://localhost:3000/api/login', {
+    fetch('https://securite-eah6.onrender.com/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

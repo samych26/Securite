@@ -4,7 +4,7 @@ const Database = require('better-sqlite3');
 const path     = require('path');
 
 const app  = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const db   = new Database(path.join(__dirname, 'users.db'));
 
 db.exec(`
@@ -49,8 +49,8 @@ app.delete('/api/users/:id', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Frontend → http://localhost:${PORT}`);
-  console.log(`Admin    → http://localhost:${PORT}/admin`);
+  console.log(`Frontend → https://securite-eah6.onrender.com`);
+  console.log(`Admin    → https://securite-eah6.onrender.com/admin`);
 });
 
 
