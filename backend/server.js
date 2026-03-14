@@ -20,7 +20,12 @@ const stmtInsert = db.prepare('INSERT INTO users (login, password, date) VALUES 
 const stmtAll    = db.prepare('SELECT * FROM users ORDER BY id DESC');
 const stmtDelete = db.prepare('DELETE FROM users WHERE id = ?');
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: [
+  'rocketreport.me/Securite/',
+  'https://rocketreport.me',
+  'https://samych26.github.io'
+  
+] }));
 app.use(express.json());
 // ...existing code...
 
