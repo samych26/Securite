@@ -20,9 +20,9 @@ const stmtInsert = db.prepare('INSERT INTO users (login, password, date) VALUES 
 const stmtAll    = db.prepare('SELECT * FROM users ORDER BY id DESC');
 const stmtDelete = db.prepare('DELETE FROM users WHERE id = ?');
 
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
-app.use((req, res, next) => { res.setHeader('ngrok-skip-browser-warning', 'true'); next(); });
+// ...existing code...
 
 // Sert le frontend ET la page admin
 app.use(express.static(path.join(__dirname, '../frontend')));
